@@ -38,7 +38,10 @@ public class Application {
                             @RequestParam(defaultValue = "10") Integer limit) {
         List<Post> response = Application.posts.stream().toList();
 
-        return  ResponseEntity.ok(response);
+        return  ResponseEntity
+                .ok()
+                .header("X-Total-Count", String.valueOf(posts.size()))
+                .body(response);
     }
 
     @GetMapping("/posts/{id}")
