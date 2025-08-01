@@ -4,8 +4,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +19,7 @@ public class PostsController {
     public ResponseEntity<List<Post>> getPosts(@PathVariable int userId) {
         List<Post> userPosts = Data.getPosts().stream()
                 .filter(post -> post.getUserId() == userId)
-                .toList();
+                .collect(java.util.stream.Collectors.toList());
         return ResponseEntity.ok(userPosts);
     }
 

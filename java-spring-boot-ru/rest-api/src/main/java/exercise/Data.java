@@ -8,16 +8,21 @@ import java.util.stream.IntStream;
 
 public class Data {
     private static final int ITEMS_COUNT = 30;
+    private static List<Post> posts;
 
-    public static List<Post> getPosts() {
+    // Статический блок для инициализации данных только один раз
+    static {
+        initializePosts();
+    }
+
+    private static void initializePosts() {
         Faker faker = new Faker();
+        posts = new ArrayList<>();
 
         List<Integer> ids = IntStream
-            .range(1, ITEMS_COUNT + 1)
-            .boxed()
-            .toList();
-
-        List<Post> posts = new ArrayList<>();
+                .range(1, ITEMS_COUNT + 1)
+                .boxed()
+                .toList();
 
         for (int i = 0; i < ITEMS_COUNT; i++) {
             var post = new Post();
@@ -27,7 +32,9 @@ public class Data {
             post.setUserId((i + 1) % 5);
             posts.add(post);
         }
+    }
 
+    public static List<Post> getPosts() {
         return posts;
     }
 }
