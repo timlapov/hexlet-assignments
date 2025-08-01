@@ -59,21 +59,24 @@ public class Application {
             data.setId(UUID.randomUUID().toString());
         }
         posts.add(data);
-        return ResponseEntity.ok(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(data);
     }
 
     @PutMapping("/posts/{id}")
     public ResponseEntity<Post> update(@PathVariable String id,
-                       @RequestBody Post data) {
-
-        posts.stream()
+                                       @RequestBody Post data) {
+        Optional<Post> postOptional = posts.stream()
                 .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .ifPresent(p -> {
-                    p.setTitle(data.getTitle());
-                    p.setBody(data.getBody());
-                });
-        return ResponseEntity.ok(data);
+                .findFirst();
+
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            post.setTitle(data.getTitle());
+            post.setBody(data.getBody());
+            return ResponseEntity.ok(post);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
     // END
 
