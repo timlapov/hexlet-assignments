@@ -13,18 +13,12 @@ import exercise.model.Post;
 @RestController
 public class Application {
 
-    // «База данных» в памяти
     private final List<Post> posts = Data.getPosts();
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    // ------------------------------------------------------------
-    // CRUD для Post
-    // ------------------------------------------------------------
-
-    // GET /posts?page=N&limit=M
     @GetMapping("/posts")
     public List<Post> index(@RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer limit) {
@@ -36,16 +30,14 @@ public class Application {
                     .toList();
     }
 
-    // GET /posts/{id}
     @GetMapping("/posts/{id}")
     public Post show(@PathVariable String id) {
         return posts.stream()
                     .filter(p -> p.getId().equals(id))
                     .findFirst()
-                    .orElse(null);           // ↳ в тестах ожидается null, а не 404
+                    .orElse(null);
     }
 
-    // POST /posts
     @PostMapping("/posts")
     public Post create(@RequestBody Post data) {
         // Генерируем id, если не передали
@@ -56,7 +48,6 @@ public class Application {
         return data;
     }
 
-    // PUT /posts/{id}
     @PutMapping("/posts/{id}")
     public Post update(@PathVariable String id,
                        @RequestBody Post data) {
@@ -68,12 +59,9 @@ public class Application {
                  p.setTitle(data.getTitle());
                  p.setBody(data.getBody());
              });
-        // В учебных заданиях принято отдавать то,
-        // что прислал клиент (data)
         return data;
     }
 
-    // DELETE /posts/{id}
     @DeleteMapping("/posts/{id}")
     public void destroy(@PathVariable String id) {
         posts.removeIf(p -> p.getId().equals(id));
