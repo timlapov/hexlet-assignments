@@ -14,23 +14,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import exercise.model.Post;
 import exercise.Data;
 
-// BEGIN
 @RestController
 public class PostsController {
+
     @GetMapping("/api/users/{userId}/posts")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Post>> getPosts(@PathVariable int userId) {
-        return ResponseEntity.ok(Data.getPosts().stream()
-            .filter(post -> post.getUserId() == userId)
-            .toList());
+        List<Post> userPosts = Data.getPosts().stream()
+                .filter(post -> post.getUserId() == userId)
+                .toList();
+        return ResponseEntity.ok(userPosts);
     }
 
     @PostMapping("/api/users/{userId}/posts")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Post> createPost(@PathVariable int userId, @RequestBody Post post) {
         post.setUserId(userId);
         Data.getPosts().add(post);
-        return ResponseEntity.ok().body(post);
+        return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
 }
-// END
