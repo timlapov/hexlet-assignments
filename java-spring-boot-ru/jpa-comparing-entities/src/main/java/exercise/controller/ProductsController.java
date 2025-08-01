@@ -36,9 +36,9 @@ public class ProductsController {
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product productData) {
-        Optional<Product> productToSave = productRepository.findById(productData.getId());
+        Optional<Product> productToSave = productRepository.findByTitleAndPrice(productData.getTitle(), productData.getPrice());
         if (productToSave.isPresent()) {
-            throw new ResourceAlreadyExistsException("Product with id " + productData.getId() + " already exists");
+            throw new ResourceAlreadyExistsException("Product with title " + productData.getTitle() + " and price " + productData.getPrice() + " already exists");
         }
         return productRepository.save(productData);
     }
