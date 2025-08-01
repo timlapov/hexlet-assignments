@@ -28,6 +28,7 @@ public class PostsController {
     @ResponseStatus(HttpStatus.CREATED)
     public Post createPost(@PathVariable int userId, @RequestBody Post post) {
         post.setUserId(userId);
+        Data.getPosts().add(post);
         return post;
     }
 }
