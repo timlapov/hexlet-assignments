@@ -2,6 +2,7 @@ package exercise.controller.users;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,18 +19,18 @@ import exercise.Data;
 public class PostsController {
     @GetMapping("/api/users/{userId}/posts")
     @ResponseStatus(HttpStatus.OK)
-    public List<Post> getPosts(@PathVariable int userId) {
-        return Data.getPosts().stream()
+    public ResponseEntity<List<Post>> getPosts(@PathVariable int userId) {
+        return ResponseEntity.ok(Data.getPosts().stream()
             .filter(post -> post.getUserId() == userId)
-            .toList();
+            .toList());
     }
 
     @PostMapping("/api/users/{userId}/posts")
     @ResponseStatus(HttpStatus.CREATED)
-    public Post createPost(@PathVariable int userId, @RequestBody Post post) {
+    public ResponseEntity<Post> createPost(@PathVariable int userId, @RequestBody Post post) {
         post.setUserId(userId);
         Data.getPosts().add(post);
-        return post;
+        return ResponseEntity.ok().body(post);
     }
 }
 // END
